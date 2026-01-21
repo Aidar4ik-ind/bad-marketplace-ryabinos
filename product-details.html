@@ -35,26 +35,6 @@
             margin-right: 15px; 
             font-size: 1.2rem; 
         }
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .gallery-thumb {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: var(--border-radius-sm);
-            cursor: pointer;
-            transition: all 0.3s;
-            border: 2px solid transparent;
-        }
-        .gallery-thumb:hover,
-        .gallery-thumb.active {
-            border-color: var(--primary-color);
-            transform: scale(1.05);
-        }
         .tab-content {
             padding: 1.5rem;
             background: white;
@@ -271,20 +251,6 @@
                                      style="max-height: 350px; cursor: pointer;"
                                      onclick="openImageModal('${product.image}')"
                                      id="mainProductImage">
-                                
-                                <!-- Галерея изображений -->
-                                <div class="image-gallery">
-                                    <img src="${product.image}" 
-                                         class="gallery-thumb active" 
-                                         alt="${product.name}"
-                                         onclick="changeMainImage('${product.image}', this)">
-                                    ${[2, 3, 4].map(i => `
-                                        <img src="assets/images/${i}.png" 
-                                             class="gallery-thumb" 
-                                             alt="Дополнительное фото ${i}"
-                                             onclick="changeMainImage('assets/images/${i}.png', this)">
-                                    `).join('')}
-                                </div>
                             </div>
                         </div>
                         <div class="col-lg-7">
