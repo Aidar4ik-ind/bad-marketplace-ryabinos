@@ -832,3 +832,9 @@ input[type="number"] {
 .badge.bg-danger {
     background: var(--danger-color) !important;
 }
+/* ===== БЕЛЫЕ ЦИФРЫ СТАТИСТИКИ НА ГЛАВНОЙ ===== */
+.stats-counter {
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
