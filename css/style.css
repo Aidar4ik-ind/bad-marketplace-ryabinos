@@ -76,13 +76,13 @@ body {
     padding: 0.75rem 0;
 }
 
-.navbar-brand {
-    font-size: 1.8rem;
+.stats-counter {
+    font-size: 2.5rem;
     font-weight: 800;
-    background: var(--gradient-1);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: #ffffff !important;
+    background: none !important;
+    -webkit-text-fill-color: #ffffff !important;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .nav-link {
