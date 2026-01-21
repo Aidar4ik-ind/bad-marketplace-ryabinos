@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина - BADDvisor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { padding-top: 80px; font-family: 'Inter', sans-serif; }
+        .cart-header { 
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 60px 0;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .cart-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+        }
+        .empty-cart { 
+            min-height: 500px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+        }
+        .coupon-input {
+            border-radius: 50px 0 0 50px !important;
+        }
+        .coupon-btn {
+            border-radius: 0 50px 50px 0 !important;
+        }
+        .order-summary {
+            position: sticky;
+            top: 100px;
+        }
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+        }
+        .shipping-progress {
+            background: var(--gray-200);
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-capsule me-2 gradient-text"></i>BADDvisor
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="assistant.html">ИИ-ассистент</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active position-relative" href="cart.html">
+                            <i class="bi bi-cart3"></i> Корзина
+                            <span id="cartCounter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Шапка корзины -->
+    <div class="cart-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold mb-3">
+                        <span class="gradient-text">Ваша корзина</span>
+                    </h1>
+                    <p class="lead text-muted">Оформите заказ или продолжайте покупки</p>
+                    
+                    <!-- Прогресс бесплатной доставки -->
+                    <div class="shipping-progress">
+                        <div class="d-flex justify-content-between mb-2">
+                            <small class="text-muted">Бесплатная доставка от 3000₽</small>
+                            <small class="text-muted" id="freeShippingProgress">0/3000₽</small>
+                        </div>
+                        <div class="progress">
+                            <div id="shippingProgressBar" class="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 text-md-end">
+                    <div class="d-inline-block bg-white p-4 rounded shadow-sm">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-cart-check text-primary fs-4 me-3"></i>
+                            <div>
+                                <div class="fw-bold fs-4" id="totalItems">0</div>
+                                <div class="text-muted small">товаров в корзине</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Содержимое корзины -->
+    <div class="container">
+        <div id="cartContainer">
+            <!-- Корзина загружается через JS -->
+        </div>
+        
+        <!-- Пустая корзина -->
+        <div id="emptyCart" class="empty-cart text-center" style="display: none;">
+            <div class="animate-fadeInUp">
+                <div class="display-1 text-muted mb-4">
+                    <i class="bi bi-cart-x"></i>
+                </div>
+                <h3 class="mb-3">Ваша корзина пуста</h3>
+                <p class="text-muted mb-4">Добавьте товары из каталога, чтобы сделать заказ</p>
+                <div class="d-flex flex-column flex-md-row gap-3 justify-content-center">
+                    <a href="catalog.html" class="btn btn-primary btn-lg">
+                        <i class="bi bi-arrow-right me-2"></i>Перейти в каталог
+                    </a>
+                    <a href="assistant.html" class="btn btn-outline-primary btn-lg">
+                        <i class="bi bi-robot me-2"></i>Попросить совета у ИИ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h4 class="fw-bold mb-4">
+                        <i class="bi bi-capsule me-2"></i>BADDvisor
+                    </h4>
+                    <p class="text-muted">Умный маркетплейс БАДов с ИИ-ассистентом. Проект создан в образовательных целях.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-4">Навигация</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html" class="text-white opacity-75 hover-opacity-100 text-decoration-none">Главная</a></li>
+                        <li class="mb-2"><a href="catalog.html" class="text-white opacity-75 hover-opacity-100 text-decoration-none">Каталог</a></li>
+                        <li class="mb-2"><a href="assistant.html" class="text-white opacity-75 hover-opacity-100 text-decoration-none">ИИ-ассистент</a></li>
+                        <li class="mb-2"><a href="cart.html" class="text-white opacity-75 hover-opacity-100 text-decoration-none">Корзина</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-4">Поддержка</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <i class="bi bi-envelope me-2"></i>
+                            <span class="opacity-75">info@baddvisor.ru</span>
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-telephone me-2"></i>
+                            <span class="opacity-75">8 (800) 555-35-35</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-clock me-2"></i>
+                            <span class="opacity-75">Пн-Пт: 9:00-18:00</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h6 class="fw-bold mb-4">Оплата и доставка</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><span class="opacity-75">Бесплатная доставка от 3000₽</span></li>
+                        <li class="mb-2"><span class="opacity-75">Оплата при получении</span></li>
+                        <li class="mb-2"><span class="opacity-75">Самовывоз из пунктов выдачи</span></li>
+                        <li><span class="opacity-75">Доставка по всей России</span></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-5 opacity-25">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0 opacity-75">
+                        <small>© 2024 BADDvisor. Демонстрационный проект. Все данные вымышлены.</small>
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 opacity-75">
+                        <small>Не является медицинской рекомендацией. Перед применением БАДов проконсультируйтесь с врачом.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        // Загрузка корзины
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCounter();
+            loadCart();
+            
+            // Импорт корзины
+            document.getElementById('importCartInput')?.addEventListener('change', function() {
+                window.importCart(this);
+            });
+        });
+
+        function updateCartCounter() {
+            if (window.cart && cart.updateCounter) {
+                cart.updateCounter();
+            }
+        }
+
+        function loadCart() {
+            const cartItems = cart.getAll();
+            const products = Products.getAll();
+            const fullCart = cart.getFullCart(products);
+            
+            // Обновляем счетчик товаров
+            document.getElementById('totalItems').textContent = cart.getCount();
+            
+            if (cartItems.length === 0) {
+                document.getElementById('cartContainer').style.display = 'none';
+                document.getElementById('emptyCart').style.display = 'flex';
+                updateShippingProgress(0);
+                return;
+            }
+            
+            document.getElementById('cartContainer').style.display = 'block';
+            document.getElementById('emptyCart').style.display = 'none';
+            
+            let subtotal = 0;
+            let discount = 0;
+            let shipping = 300; // Базовая стоимость доставки
+            
+            // Обновляем прогресс бесплатной доставки
+            updateShippingProgress(subtotal);
+            
+            let html = `
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-4">
+                                    <h4 class="card-title mb-0">
+                                        <i class="bi bi-bag-check me-2"></i>Товары в корзине
+                                    </h4>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="clearCart()">
+                                        <i class="bi bi-trash me-1"></i>Очистить корзину
+                                    </button>
+                                </div>
+            `;
+            
+            // Товары
+            fullCart.forEach(item => {
+                const product = item.product;
+                const itemTotal = product.price * item.quantity;
+                subtotal += itemTotal;
+                
+                html += `
+                    <div class="cart-item mb-4 pb-4 border-bottom">
+                        <div class="row align-items-center">
+                            <div class="col-md-2 col-4">
+                                <a href="product-details.html?id=${product.id}" class="d-block">
+                                    <img src="${product.image}" 
+                                         class="img-fluid rounded" 
+                                         alt="${product.name}"
+                                         style="height: 80px; width: 80px; object-fit: cover;"
+                                         onerror="this.src='data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 80 80\"><rect width=\"80\" height=\"80\" fill=\"%23f8f9fa\"/><text x=\"40\" y=\"45\" font-family=\"Arial\" font-size=\"10\" text-anchor=\"middle\" fill=\"%236c757d\">Нет фото</text></svg>'">
+                                </a>
+                            </div>
+                            <div class="col-md-4 col-8">
+                                <h6 class="mb-1">
+                                    <a href="product-details.html?id=${product.id}" class="text-decoration-none text-dark fw-bold">
+                                        ${product.name}
+                                    </a>
+                                </h6>
+                                <p class="text-muted small mb-0">${product.description}</p>
+                                <div class="mt-2">
+                                    ${product.tags.slice(0, 2).map(tag => 
+                                        `<span class="badge-tag">${tag}</span>`
+                                    ).join('')}
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-6 mt-3 mt-md-0">
+                                <div class="input-group" style="width: 140px;">
+                                    <button class="btn btn-outline-secondary" 
+                                            type="button"
+                                            onclick="updateQuantity(${product.id}, ${item.quantity - 1})">
+                                        <i class="bi bi-dash"></i>
+                                    </button>
+                                    <input type="text" 
+                                           class="form-control text-center quantity-input" 
+                                           value="${item.quantity}"
+                                           readonly>
+                                    <button class="btn btn-outline-secondary" 
+                                            type="button"
+                                            onclick="updateQuantity(${product.id}, ${item.quantity + 1})">
+                                        <i class="bi bi-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-3 mt-3 mt-md-0 text-center">
+                                <span class="fw-bold h5 mb-0">${product.price} ₽</span>
+                            </div>
+                            <div class="col-md-1 col-3 mt-3 mt-md-0 text-center">
+                                <button class="btn btn-outline-danger btn-sm" 
+                                        onclick="removeFromCart(${product.id})"
+                                        title="Удалить из корзины">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12 text-end">
+                                <span class="text-muted">Сумма: </span>
+                                <span class="fw-bold">${itemTotal} ₽</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // Бесплатная доставка
+            if (subtotal >= 3000) {
+                shipping = 0;
+            }
+            
+            const total = subtotal - discount + shipping;
+            
+            html += `
+                            </div>
+                        </div>
+                        
+                        <!-- Купон -->
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">
+                                    <i class="bi bi-ticket-perforated text-primary me-2"></i>Купон на скидку
+                                </h5>
+                                <div class="input-group mb-3">
+                                    <input type="text" 
+                                           class="form-control coupon-input" 
+                                           id="couponCode" 
+                                           placeholder="Введите код купона">
+                                    <button class="btn btn-outline-primary coupon-btn" onclick="applyCoupon()">
+                                        Применить
+                                    </button>
+                                </div>
+                                <div class="small text-muted">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Демо-купоны: <code>WELCOME10</code> (10% скидка), <code>FIRSTORDER</code> (500₽ скидка)
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Импорт/экспорт -->
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title mb-3">
+                                    <i class="bi bi-arrow-left-right text-primary me-2"></i>Импорт/экспорт корзины
+                                </h5>
+                                <div class="d-flex gap-3">
+                                    <button class="btn btn-outline-primary" onclick="window.exportCart()">
+                                        <i class="bi bi-download me-2"></i>Экспорт корзины
+                                    </button>
+                                    <div class="flex-grow-1">
+                                        <input type="file" 
+                                               class="form-control" 
+                                               id="importCartInput" 
+                                               accept=".json"
+                                               style="display: none;">
+                                        <button class="btn btn-outline-secondary w-100" onclick="document.getElementById('importCartInput').click()">
+                                            <i class="bi bi-upload me-2"></i>Импорт корзины
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="small text-muted mt-2">
+                                    <i class="bi bi-info-circle me-1"></i>
+                                    Вы можете сохранить корзину в файл и загрузить её позже
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="order-summary">
+                            <div class="card border-0 shadow-sm sticky-top" style="top: 100px;">
+                                <div class="card-body">
+                                    <h4 class="card-title mb-4">
+                                        <i class="bi bi-receipt me-2"></i>Итог заказа
+                                    </h4>
+                                    
+                                    <div class="mb-4">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">Товары (${cart.getUniqueCount()})</span>
+                                            <span>${subtotal} ₽</span>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="text-muted">Доставка</span>
+                                            <span id="shippingCost">${shipping} ₽</span>
+                                        </div>
+                                        
+                                        <div class="d-flex justify-content-between mb-3" id="discountRow" style="display: ${discount > 0 ? 'flex' : 'none'} !important;">
+                                            <span class="text-muted">Скидка</span>
+                                            <span class="text-success">-${discount} ₽</span>
+                                        </div>
+                                        
+                                        <hr>
+                                        <div class="d-flex justify-content-between">
+                                            <span class="fw-bold">Итого</span>
+                                            <span class="fw-bold fs-4" id="orderTotal">${total} ₽</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Информация о доставке -->
+                                    <div class="alert ${shipping === 0 ? 'alert-success' : 'alert-info'} small mb-4">
+                                        <i class="bi ${shipping === 0 ? 'bi-check-circle' : 'bi-info-circle'} me-2"></i>
+                                        ${shipping === 0 
+                                            ? '🎉 Ура! Доставка бесплатная!' 
+                                            : `Добавьте товаров на <strong>${3000 - subtotal} ₽</strong> для бесплатной доставки`}
+                                    </div>
+                                    
+                                    <button class="btn btn-primary w-100 btn-lg mb-3" onclick="checkout()">
+                                        <i class="bi bi-lock me-2"></i>Перейти к оформлению
+                                    </button>
+                                    
+                                    <div class="text-center mt-4">
+                                        <a href="catalog.html" class="text-decoration-none">
+                                            <i class="bi bi-arrow-left me-2"></i>Продолжить покупки
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Важное предупреждение -->
+                <div class="alert alert-warning mt-5">
+                    <div class="d-flex">
+                        <i class="bi bi-exclamation-triangle fs-4 me-3"></i>
+                        <div>
+                            <h5 class="alert-heading mb-2">Демонстрационный проект</h5>
+                            <p class="mb-0">
+                                Оформление заказа не доступно в демо-версии. Это только демонстрация функционала корзины.
+                                Все данные вымышлены.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('cartContainer').innerHTML = html;
+            updateShippingProgress(subtotal);
+        }
+
+        function updateQuantity(productId, newQuantity) {
+            if (newQuantity <= 0) {
+                removeFromCart(productId);
+            } else {
+                cart.update(productId, newQuantity);
+                loadCart();
+                updateCartCounter();
+                
+                if (window.cart && window.cart.showNotification) {
+                    cart.showNotification('Количество обновлено', 'info');
+                }
+            }
+        }
+
+        function removeFromCart(productId) {
+            if (confirm('Удалить товар из корзины?')) {
+                cart.remove(productId);
+                loadCart();
+                updateCartCounter();
+                
+                if (window.cart && window.cart.showNotification) {
+                    cart.showNotification('Товар удален из корзины', 'info');
+                }
+            }
+        }
+
+        function clearCart() {
+            if (confirm('Очистить всю корзину?')) {
+                cart.clear();
+                loadCart();
+                updateCartCounter();
+                
+                if (window.cart && window.cart.showNotification) {
+                    cart.showNotification('Корзина очищена', 'info');
+                }
+            }
+        }
+
+        function checkout() {
+            if (window.cart && window.cart.showNotification) {
+                cart.showNotification('Оформление заказа доступно в полной версии проекта', 'info');
+            }
+        }
+
+        function applyCoupon() {
+            const couponCode = document.getElementById('couponCode')?.value.trim().toUpperCase();
+            const coupons = {
+                'WELCOME10': { type: 'percent', value: 10 },
+                'FIRSTORDER': { type: 'fixed', value: 500 },
+                'DEMO2024': { type: 'percent', value: 15 }
+            };
+            
+            if (!couponCode) {
+                if (window.cart && window.cart.showNotification) {
+                    cart.showNotification('Введите код купона', 'warning');
+                }
+                return;
+            }
+            
+            const coupon = coupons[couponCode];
+            
+            if (coupon) {
+                const cartItems = cart.getFullCart(Products.getAll());
+                const subtotal = cartItems.reduce((sum, item) => sum + item.total, 0);
+                
+                let discount = 0;
+                if (coupon.type === 'percent') {
+                    discount = Math.round(subtotal * coupon.value / 100);
+                } else if (coupon.type === 'fixed') {
+                    discount = Math.min(coupon.value, subtotal);
+                }
+                
+                // В демо-версии просто показываем уведомление
+                if (window.cart && window.cart.showNotification) {
+                    cart.showNotification(`Купон "${couponCode}" применен! Скидка: ${discount} ₽`, 'success');
+                }
+                
+                // В реальном приложении здесь был бы пересчет суммы
+            } else {
+                if (window.cart && window.cart.showNotification) {
+                    cart.showNotification('Недействительный код купона', 'danger');
+                }
+            }
+        }
+
+        function updateShippingProgress(subtotal) {
+            const progressElement = document.getElementById('shippingProgressBar');
+            const progressText = document.getElementById('freeShippingProgress');
+            
+            if (!progressElement || !progressText) return;
+            
+            const progress = Math.min((subtotal / 3000) * 100, 100);
+            progressElement.style.width = `${progress}%`;
+            progressText.textContent = `${subtotal}/3000₽`;
+            
+            // Обновляем цвет прогресса
+            if (subtotal >= 3000) {
+                progressElement.style.background = 'var(--gradient-3)';
+            } else if (subtotal >= 1500) {
+                progressElement.style.background = 'var(--gradient-4)';
+            } else {
+                progressElement.style.background = 'var(--gradient-1)';
+            }
+        }
+    </script>
+</body>
+</html>
