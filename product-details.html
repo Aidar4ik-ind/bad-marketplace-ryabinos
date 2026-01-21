@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Детали товара - BADDvisor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body { padding-top: 80px; font-family: 'Inter', sans-serif; }
+        .product-hero { 
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            padding: 40px 0; 
+            border-radius: var(--border-radius-lg);
+            margin-bottom: 30px;
+        }
+        .spec-card { 
+            background: white; 
+            border-radius: var(--border-radius-lg); 
+            padding: 25px; 
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--gray-200);
+        }
+        .benefit-item { 
+            display: flex; 
+            align-items: flex-start; 
+            margin-bottom: 15px; 
+        }
+        .benefit-icon { 
+            color: var(--primary-color); 
+            margin-right: 15px; 
+            font-size: 1.2rem; 
+        }
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .gallery-thumb {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: var(--border-radius-sm);
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .gallery-thumb:hover,
+        .gallery-thumb.active {
+            border-color: var(--primary-color);
+            transform: scale(1.05);
+        }
+        .tab-content {
+            padding: 1.5rem;
+            background: white;
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+            border: 1px solid var(--gray-200);
+            border-top: none;
+        }
+        .nav-tabs .nav-link {
+            border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+            font-weight: 500;
+        }
+        .review-item {
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+        }
+        .review-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        .rating-stars {
+            color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <i class="bi bi-capsule me-2 gradient-text"></i>BADDvisor
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="catalog.html">Каталог</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="assistant.html">ИИ-ассистент</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link position-relative" href="cart.html">
+                            <i class="bi bi-cart3"></i> Корзина
+                            <span id="cartCounter" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Хлебные крошки -->
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Главная</a></li>
+                <li class="breadcrumb-item"><a href="catalog.html" class="text-decoration-none">Каталог</a></li>
+                <li class="breadcrumb-item active" id="productBreadcrumb">Загрузка...</li>
+            </ol>
+        </nav>
+    </div>
+
+    <!-- Детали товара -->
+    <div class="container" id="productDetails">
+        <!-- Товар загружается через JS -->
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;">
+                <span class="visually-hidden">Загрузка...</span>
+            </div>
+            <p class="mt-3 fs-5">Загружаем информацию о товаре...</p>
+        </div>
+    </div>
+
+    <!-- Футер -->
+    <footer class="bg-dark text-white py-5 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 mb-4 mb-lg-0">
+                    <h4 class="fw-bold mb-4">
+                        <i class="bi bi-capsule me-2"></i>BADDvisor
+                    </h4>
+                    <p class="text-muted">Умный маркетплейс БАДов с ИИ-ассистентом. Проект создан в образовательных целях.</p>
+                </div>
+                <div class="col-lg-2 col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-4">Навигация</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="index.html" class="text-white opacity-75 hover-opacity-100 text-decoration-none">Главная</a></li>
+                        <li class="mb-2"><a href="catalog.html" class="text-white opacity-75 hover-opacity-100 text-decoration-none">Каталог</a></li>
+                        <li class="mb-2"><a href="assistant.html" class="text-white opacity-75 hover-opacity-100 text-decoration-none">ИИ-ассистент</a></li>
+                        <li class="mb-2"><a href="cart.html" class="text-white opacity-75 hover-opacity-100 text-decoration-none">Корзина</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4 mb-4 mb-md-0">
+                    <h6 class="fw-bold mb-4">Помощь</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-3">
+                            <a href="assistant.html" class="text-white opacity-75 hover-opacity-100 text-decoration-none">
+                                <i class="bi bi-robot me-2"></i>ИИ-консультация
+                            </a>
+                        </li>
+                        <li class="mb-3">
+                            <i class="bi bi-envelope me-2"></i>
+                            <span class="opacity-75">info@baddvisor.ru</span>
+                        </li>
+                        <li>
+                            <i class="bi bi-telephone me-2"></i>
+                            <span class="opacity-75">8 (800) 555-35-35</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-4">
+                    <h6 class="fw-bold mb-4">Гарантии</h6>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><span class="opacity-75">Официальный поставщик</span></li>
+                        <li class="mb-2"><span class="opacity-75">Сертификаты качества</span></li>
+                        <li class="mb-2"><span class="opacity-75">Возврат в течение 14 дней</span></li>
+                        <li><span class="opacity-75">Контроль качества</span></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-5 opacity-25">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0 opacity-75">
+                        <small>© 2024 BADDvisor. Демонстрационный проект. Все данные вымышлены.</small>
+                    </p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="mb-0 opacity-75">
+                        <small>Не является медицинской рекомендацией. Перед применением БАДов проконсультируйтесь с врачом.</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Модальное окно изображения -->
+    <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="" id="modalImage" class="img-fluid" style="max-height: 70vh;">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        // Получаем ID товара из URL
+        function getProductIdFromURL() {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id'));
+            return id && id >= 1 && id <= 30 ? id : 1;
+        }
+
+        // Загрузка деталей товара
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCounter();
+            loadProductDetails();
+        });
+
+        function updateCartCounter() {
+            if (window.cart && cart.updateCounter) {
+                cart.updateCounter();
+            }
+        }
+
+        function loadProductDetails() {
+            const productId = getProductIdFromURL();
+            const product = Products.getById(productId);
+            
+            if (!product) {
+                document.getElementById('productDetails').innerHTML = `
+                    <div class="alert alert-danger text-center py-5">
+                        <div class="display-1 mb-4">
+                            <i class="bi bi-exclamation-triangle"></i>
+                        </div>
+                        <h4 class="mb-3">Товар не найден</h4>
+                        <p class="mb-4">Товар с ID ${productId} не существует в нашем каталоге</p>
+                        <a href="catalog.html" class="btn btn-primary btn-lg">
+                            <i class="bi bi-arrow-left me-2"></i>Вернуться в каталог
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Получаем похожие товары
+            const similarProducts = Products.getSimilarProducts(productId, 4);
+            
+            // Обновляем хлебные крошки
+            document.getElementById('productBreadcrumb').textContent = product.name;
+            
+            // Формируем HTML
+            document.getElementById('productDetails').innerHTML = `
+                <!-- Основная информация -->
+                <div class="product-hero">
+                    <div class="row align-items-center">
+                        <div class="col-lg-5 mb-4 mb-lg-0">
+                            <div class="text-center position-relative">
+                                <img src="${product.image}" 
+                                     class="img-fluid rounded-3 shadow main-product-image" 
+                                     alt="${product.name}"
+                                     style="max-height: 350px; cursor: pointer;"
+                                     onclick="openImageModal('${product.image}')"
+                                     id="mainProductImage">
+                                
+                                <!-- Галерея изображений -->
+                                <div class="image-gallery">
+                                    <img src="${product.image}" 
+                                         class="gallery-thumb active" 
+                                         alt="${product.name}"
+                                         onclick="changeMainImage('${product.image}', this)">
+                                    ${[2, 3, 4].map(i => `
+                                        <img src="assets/images/${i}.png" 
+                                             class="gallery-thumb" 
+                                             alt="Дополнительное фото ${i}"
+                                             onclick="changeMainImage('assets/images/${i}.png', this)">
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7">
+                            <div class="ps-lg-4">
+                                <h1 class="display-5 fw-bold mb-3">${product.name}</h1>
+                                
+                                <!-- Рейтинг -->
+                                <div class="d-flex align-items-center mb-3">
+                                    <div class="rating-stars me-2">
+                                        ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
+                                    </div>
+                                    <span class="fw-bold me-2">${product.rating}</span>
+                                    <span class="text-muted">(${product.reviews} отзывов)</span>
+                                    <span class="badge bg-success ms-3">
+                                        <i class="bi bi-check-circle me-1"></i>В наличии
+                                    </span>
+                                </div>
+                                
+                                <p class="lead text-muted mb-4">${product.description}</p>
+                                
+                                <!-- Теги -->
+                                <div class="mb-4">
+                                    ${product.tags.map(tag => 
+                                        `<span class="badge-tag fs-6">${tag}</span>`
+                                    ).join('')}
+                                </div>
+                                
+                                <!-- Цена и кнопки -->
+                                <div class="d-flex align-items-center mb-4">
+                                    <span class="display-4 fw-bold text-primary me-4">${product.price} ₽</span>
+                                    <div class="d-flex gap-2">
+                                        <div class="input-group" style="width: 140px;">
+                                            <button class="btn btn-outline-secondary" 
+                                                    type="button"
+                                                    onclick="updateProductQuantity(-1)">
+                                                <i class="bi bi-dash"></i>
+                                            </button>
+                                            <input type="text" 
+                                                   class="form-control text-center quantity-input" 
+                                                   value="1"
+                                                   id="productQuantity"
+                                                   readonly>
+                                            <button class="btn btn-outline-secondary" 
+                                                    type="button"
+                                                    onclick="updateProductQuantity(1)">
+                                                <i class="bi bi-plus"></i>
+                                            </button>
+                                        </div>
+                                        <button class="btn btn-primary btn-lg px-5" onclick="addToCart(${product.id})">
+                                            <i class="bi bi-cart-plus me-2"></i>В корзину
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Преимущества -->
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="benefit-item">
+                                            <div class="benefit-icon"><i class="bi bi-truck"></i></div>
+                                            <div>
+                                                <strong>Бесплатная доставка</strong>
+                                                <div class="text-muted small">При заказе от 3000 ₽</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="benefit-item">
+                                            <div class="benefit-icon"><i class="bi bi-shield-check"></i></div>
+                                            <div>
+                                                <strong>Гарантия качества</strong>
+                                                <div class="text-muted small">Официальный поставщик</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="benefit-item">
+                                            <div class="benefit-icon"><i class="bi bi-arrow-counterclockwise"></i></div>
+                                            <div>
+                                                <strong>Возврат 14 дней</strong>
+                                                <div class="text-muted small">Если не подошло</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="benefit-item">
+                                            <div class="benefit-icon"><i class="bi bi-headset"></i></div>
+                                            <div>
+                                                <strong>Консультация</strong>
+                                                <div class="text-muted small">Помощь в выборе</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Табы с информацией -->
+                <div class="row mt-5">
+                    <div class="col-lg-8">
+                        <ul class="nav nav-tabs" id="productTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description">
+                                    <i class="bi bi-info-circle me-2"></i>Описание
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="characteristics-tab" data-bs-toggle="tab" data-bs-target="#characteristics">
+                                    <i class="bi bi-card-checklist me-2"></i>Характеристики
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="instructions-tab" data-bs-toggle="tab" data-bs-target="#instructions">
+                                    <i class="bi bi-file-text me-2"></i>Инструкция
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews">
+                                    <i class="bi bi-chat-left-text me-2"></i>Отзывы (${product.reviews})
+                                </button>
+                            </li>
+                        </ul>
+                        
+                        <div class="tab-content" id="productTabsContent">
+                            <!-- Описание -->
+                            <div class="tab-pane fade show active" id="description">
+                                <h4 class="mb-4">Подробное описание</h4>
+                                <div class="card-text fs-5">
+                                    ${product.fullDescription || `
+                                        <p>${product.description}</p>
+                                        <p>Этот БАД создан на основе натуральных компонентов для поддержания ${product.tags.slice(0, 2).join(' и ')}. Формула разработана с учетом современных научных исследований и стандартов качества.</p>
+                                        <p><strong>Основные преимущества:</strong></p>
+                                        <ul>
+                                            <li>Высокая биодоступность компонентов</li>
+                                            <li>Натуральный состав без искусственных добавок</li>
+                                            <li>Производство в соответствии с GMP стандартами</li>
+                                            <li>Проверенная эффективность</li>
+                                        </ul>
+                                    `}
+                                </div>
+                                
+                                <!-- Действие и эффекты -->
+                                <div class="mt-5">
+                                    <h4 class="mb-4">
+                                        <i class="bi bi-check2-circle text-primary me-2"></i>Действие и эффекты
+                                    </h4>
+                                    <div class="row">
+                                        ${product.tags.map(tag => `
+                                            <div class="col-md-6 mb-3">
+                                                <div class="d-flex align-items-center p-3 bg-light rounded-3">
+                                                    <i class="bi bi-check-lg text-success fs-5 me-3"></i>
+                                                    <div>
+                                                        <div class="fw-medium">${getTagDescription(tag)}</div>
+                                                        <div class="text-muted small mt-1">${getTagEffect(tag)}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Характеристики -->
+                            <div class="tab-pane fade" id="characteristics">
+                                <h4 class="mb-4">Характеристики товара</h4>
+                                <table class="table">
+                                    <tbody>
+                                        ${product.composition ? `
+                                        <tr>
+                                            <td class="text-muted" style="width: 200px;"><strong>Состав:</strong></td>
+                                            <td>${product.composition}</td>
+                                        </tr>
+                                        ` : ''}
+                                        
+                                        ${product.dosage ? `
+                                        <tr>
+                                            <td class="text-muted"><strong>Дозировка:</strong></td>
+                                            <td>${product.dosage}</td>
+                                        </tr>
+                                        ` : ''}
+                                        
+                                        ${product.form ? `
+                                        <tr>
+                                            <td class="text-muted"><strong>Форма выпуска:</strong></td>
+                                            <td>${product.form}</td>
+                                        </tr>
+                                        ` : ''}
+                                        
+                                        ${product.quantity ? `
+                                        <tr>
+                                            <td class="text-muted"><strong>Количество в упаковке:</strong></td>
+                                            <td>${product.quantity}</td>
+                                        </tr>
+                                        ` : ''}
+                                        
+                                        ${product.manufacturer ? `
+                                        <tr>
+                                            <td class="text-muted"><strong>Производитель:</strong></td>
+                                            <td>${product.manufacturer}</td>
+                                        </tr>
+                                        ` : ''}
+                                        
+                                        ${product.shelfLife ? `
+                                        <tr>
+                                            <td class="text-muted"><strong>Срок годности:</strong></td>
+                                            <td>${product.shelfLife}</td>
+                                        </tr>
+                                        ` : ''}
+                                        
+                                        ${product.storage ? `
+                                        <tr>
+                                            <td class="text-muted"><strong>Условия хранения:</strong></td>
+                                            <td>${product.storage}</td>
+                                        </tr>
+                                        ` : ''}
+                                        
+                                        ${product.contraindications ? `
+                                        <tr>
+                                            <td class="text-muted"><strong>Противопоказания:</strong></td>
+                                            <td>${product.contraindications}</td>
+                                        </tr>
+                                        ` : ''}
+                                        
+                                        <tr>
+                                            <td class="text-muted"><strong>Категория:</strong></td>
+                                            <td>
+                                                <span class="badge bg-primary">${product.category}</span>
+                                            </td>
+                                        </tr>
+                                        
+                                        <tr>
+                                            <td class="text-muted"><strong>Теги:</strong></td>
+                                            <td>
+                                                ${product.tags.map(tag => `<span class="badge-tag me-1">${tag}</span>`).join('')}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            <!-- Инструкция -->
+                            <div class="tab-pane fade" id="instructions">
+                                <h4 class="mb-4">Инструкция по применению</h4>
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle me-2"></i>
+                                    <strong>Важно:</strong> Перед применением проконсультируйтесь с врачом.
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h5>Рекомендации по применению:</h5>
+                                    <ul>
+                                        <li>${product.dosage || 'Согласно инструкции на упаковке'}</li>
+                                        <li>Принимать во время или после еды</li>
+                                        <li>Курс приема: 1-3 месяца</li>
+                                        <li>При необходимости курс можно повторить после перерыва 1-2 месяца</li>
+                                    </ul>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <h5>Особые указания:</h5>
+                                    <ul>
+                                        <li>Не превышайте рекомендованную дозировку</li>
+                                        <li>Хранить в недоступном для детей месте</li>
+                                        <li>Не использовать после истечения срока годности</li>
+                                        <li>При возникновении побочных эффектов прекратить прием</li>
+                                    </ul>
+                                </div>
+                                
+                                ${product.instructionLink && product.instructionLink !== '#' ? `
+                                <div class="text-center mt-4">
+                                    <a href="${product.instructionLink}" 
+                                       target="_blank" 
+                                       class="btn btn-primary">
+                                        <i class="bi bi-download me-2"></i>Скачать полную инструкцию (PDF)
+                                    </a>
+                                </div>
+                                ` : ''}
+                            </div>
+                            
+                            <!-- Отзывы -->
+                            <div class="tab-pane fade" id="reviews">
+                                <h4 class="mb-4">Отзывы покупателей</h4>
+                                
+                                <!-- Сводка рейтинга -->
+                                <div class="row mb-5">
+                                    <div class="col-md-4 text-center">
+                                        <div class="display-4 fw-bold text-primary">${product.rating}</div>
+                                        <div class="rating-stars mb-2">
+                                            ${'★'.repeat(Math.floor(product.rating))}${'☆'.repeat(5 - Math.floor(product.rating))}
+                                        </div>
+                                        <div class="text-muted">${product.reviews} отзывов</div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="d-flex flex-column gap-2">
+                                            ${[5, 4, 3, 2, 1].map(rating => {
+                                                const count = Math.floor(Math.random() * product.reviews * 0.3);
+                                                const percent = (count / product.reviews * 100).toFixed(0);
+                                                return `
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="me-2" style="width: 40px;">${rating} ★</div>
+                                                        <div class="progress flex-grow-1" style="height: 10px;">
+                                                            <div class="progress-bar" style="width: ${percent}%"></div>
+                                                        </div>
+                                                        <div class="ms-2" style="width: 40px;">${percent}%</div>
+                                                    </div>
+                                                `;
+                                            }).join('')}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Отзывы -->
+                                <div id="reviewsList">
+                                    ${generateReviews(product.reviews)}
+                                </div>
+                                
+                                <!-- Кнопка добавления отзыва -->
+                                <div class="text-center mt-4">
+                                    <button class="btn btn-outline-primary" onclick="showAddReviewModal()">
+                                        <i class="bi bi-pencil me-2"></i>Написать отзыв
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <!-- Характеристики -->
+                        <div class="spec-card sticky-top" style="top: 100px;">
+                            <h3 class="mb-4">
+                                <i class="bi bi-card-checklist text-primary me-2"></i>Краткие характеристики
+                            </h3>
+                            
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Цена:</span>
+                                    <span class="fw-bold fs-4 text-primary">${product.price} ₽</span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span class="text-muted">Рейтинг:</span>
+                                    <span class="fw-bold">${product.rating} ★</span>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between mb-4">
+                                    <span class="text-muted">Категория:</span>
+                                    <span class="badge bg-primary">${product.category}</span>
+                                </div>
+                                
+                                <hr>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-check-circle text-success me-2"></i>
+                                    <span>В наличии</span>
+                                </div>
+                                <div class="d-flex align-items-center mb-3">
+                                    <i class="bi bi-truck text-primary me-2"></i>
+                                    <span>Доставка 1-3 дня</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-arrow-counterclockwise text-warning me-2"></i>
+                                    <span>Возврат в течение 14 дней</span>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4">
+                                <!-- Выбор количества -->
+                                <div class="d-flex align-items-center mb-3">
+                                    <span class="me-3">Количество:</span>
+                                    <div class="input-group" style="width: 140px;">
+                                        <button class="btn btn-outline-secondary" 
+                                                type="button"
+                                                onclick="updateProductQuantity(-1)">
+                                            <i class="bi bi-dash"></i>
+                                        </button>
+                                        <input type="text" 
+                                               class="form-control text-center quantity-input" 
+                                               value="1"
+                                               id="productQuantitySidebar"
+                                               readonly>
+                                        <button class="btn btn-outline-secondary" 
+                                                type="button"
+                                                onclick="updateProductQuantity(1)">
+                                            <i class="bi bi-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <button class="btn btn-primary w-100 btn-lg mb-3" onclick="addToCart(${product.id})">
+                                    <i class="bi bi-cart-plus me-2"></i>Добавить в корзину
+                                </button>
+                                
+                                <button class="btn btn-outline-primary w-100 mb-3" onclick="addToWishlist(${product.id})">
+                                    <i class="bi bi-heart me-2"></i>В избранное
+                                </button>
+                                
+                                <div class="text-center">
+                                    <a href="assistant.html" class="text-decoration-none">
+                                        <i class="bi bi-robot me-2"></i>Консультация с ИИ
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Похожие товары -->
+                        ${similarProducts.length > 0 ? `
+                        <div class="spec-card mt-4">
+                            <h4 class="mb-4">
+                                <i class="bi bi-arrow-left-right text-primary me-2"></i>Похожие товары
+                            </h4>
+                            <div class="row g-3">
+                                ${similarProducts.map(similar => `
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center p-2 border rounded-3">
+                                            <img src="${similar.image}" 
+                                                 class="rounded me-3" 
+                                                 style="width: 60px; height: 60px; object-fit: cover;"
+                                                 alt="${similar.name}">
+                                            <div class="flex-grow-1">
+                                                <h6 class="mb-1">
+                                                    <a href="product-details.html?id=${similar.id}" class="text-decoration-none text-dark">
+                                                        ${similar.name}
+                                                    </a>
+                                                </h6>
+                                                <div class="d-flex justify-content-between">
+                                                    <span class="text-primary fw-bold">${similar.price} ₽</span>
+                                                    <button class="btn btn-sm btn-outline-primary" onclick="addToCart(${similar.id}, 1, event)">
+                                                        <i class="bi bi-cart-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                </div>
+
+                <!-- Важное предупреждение -->
+                <div class="alert alert-warning mt-5">
+                    <div class="d-flex">
+                        <i class="bi bi-exclamation-triangle fs-4 me-3"></i>
+                        <div>
+                            <h5 class="alert-heading mb-2">Демонстрационный проект</h5>
+                            <p class="mb-0">
+                                <strong>Внимание!</strong> Все данные вымышлены. Не является медицинской рекомендацией. 
+                                Перед применением БАДов проконсультируйтесь с врачом. БАД не является лекарственным средством.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Вспомогательные функции
+        function getTagDescription(tag) {
+            const descriptions = {
+                'магний': 'Поддержка нервной системы и мышц',
+                'сон': 'Улучшение качества сна',
+                'стресс': 'Снижение уровня стресса',
+                'энергия': 'Повышение энергии и бодрости',
+                'иммунитет': 'Укрепление иммунной системы',
+                'пищеварение': 'Нормализация пищеварения',
+                'суставы': 'Поддержка здоровья суставов',
+                'концентрация': 'Улучшение концентрации внимания',
+                'детокс': 'Очищение организма'
+            };
+            return descriptions[tag] || tag;
+        }
+
+        function getTagEffect(tag) {
+            const effects = {
+                'магний': 'Снижает утомляемость, улучшает сон',
+                'сон': 'Помогает засыпать и улучшает качество сна',
+                'стресс': 'Способствует расслаблению и успокоению',
+                'энергия': 'Повышает работоспособность и тонус',
+                'иммунитет': 'Защищает от вирусов и инфекций',
+                'пищеварение': 'Улучшает работу ЖКТ и усвоение питательных веществ',
+                'суставы': 'Снимает воспаление и улучшает подвижность',
+                'концентрация': 'Улучшает память и умственную работоспособность',
+                'детокс': 'Выводит токсины и очищает организм'
+            };
+            return effects[tag] || 'Положительное воздействие на организм';
+        }
+
+        function generateReviews(count) {
+            const names = ['Анна', 'Михаил', 'Елена', 'Дмитрий', 'Ольга', 'Сергей', 'Ирина', 'Алексей'];
+            const reviews = [];
+            
+            for (let i = 0; i < Math.min(5, Math.floor(count / 20)); i++) {
+                const name = names[Math.floor(Math.random() * names.length)];
+                const rating = Math.floor(Math.random() * 2) + 4; // 4 или 5 звезд
+                const date = `${Math.floor(Math.random() * 28) + 1}.${Math.floor(Math.random() * 12) + 1}.2024`;
+                const text = [
+                    'Отличный продукт, чувствую улучшение!',
+                    'Качественный БАД, помогает решить проблему',
+                    'Принимаю курсом, результат заметен',
+                    'Рекомендую, действительно работает',
+                    'Хорошее качество, разумная цена'
+                ][Math.floor(Math.random() * 5)];
+                
+                reviews.push(`
+                    <div class="review-item">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="mb-1">${name}</h6>
+                                <div class="rating-stars small">
+                                    ${'★'.repeat(rating)}${'☆'.repeat(5 - rating)}
+                                </div>
+                            </div>
+                            <small class="text-muted">${date}</small>
+                        </div>
+                        <p class="mb-0">${text}</p>
+                    </div>
+                `);
+            }
+            
+            return reviews.length > 0 ? reviews.join('') : `
+                <div class="text-center py-4">
+                    <i class="bi bi-chat-left-text display-1 text-muted mb-3"></i>
+                    <h5>Отзывов пока нет</h5>
+                    <p class="text-muted">Будьте первым, кто оставит отзыв об этом товаре</p>
+                </div>
+            `;
+        }
+
+        function addToCart(productId) {
+            const quantity = parseInt(document.getElementById('productQuantity').value) || 1;
+            
+            if (window.addToCart) {
+                window.addToCart(productId, quantity, event);
+                updateCartCounter();
+                
+                // Показываем уведомление
+                if (window.cart && window.cart.showNotification) {
+                    cart.showNotification(`Добавлено ${quantity} шт. в корзину!`, 'success');
+                }
+            }
+        }
+
+        function updateProductQuantity(change) {
+            const input = document.getElementById('productQuantity');
+            const sidebarInput = document.getElementById('productQuantitySidebar');
+            let quantity = parseInt(input.value) || 1;
+            
+            quantity += change;
+            if (quantity < 1) quantity = 1;
+            if (quantity > 99) quantity = 99;
+            
+            input.value = quantity;
+            if (sidebarInput) sidebarInput.value = quantity;
+        }
+
+        function addToWishlist(productId) {
+            if (window.cart && window.cart.showNotification) {
+                cart.showNotification('Товар добавлен в избранное (демо-функция)', 'info');
+            }
+        }
+
+        function changeMainImage(src, element) {
+            // Меняем основное изображение
+            const mainImage = document.getElementById('mainProductImage');
+            if (mainImage) {
+                mainImage.src = src;
+            }
+            
+            // Убираем активный класс со всех миниатюр
+            document.querySelectorAll('.gallery-thumb').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            
+            // Добавляем активный класс текущей миниатюре
+            if (element) {
+                element.classList.add('active');
+            }
+        }
+
+        function openImageModal(src) {
+            const modalImage = document.getElementById('modalImage');
+            if (modalImage) {
+                modalImage.src = src;
+                const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+                modal.show();
+            }
+        }
+
+        function showAddReviewModal() {
+            if (window.cart && window.cart.showNotification) {
+                cart.showNotification('Добавление отзывов доступно в полной версии', 'info');
+            }
+        }
+    </script>
+</body>
+</html>
