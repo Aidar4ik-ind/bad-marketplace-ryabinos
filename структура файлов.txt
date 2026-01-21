@@ -1,0 +1,19 @@
+BAD-Marketplace-Redesign.zip/
+├── index.html
+├── catalog.html
+├── product-details.html
+├── cart.html
+├── assistant.html
+├── css/
+│   └── style.css
+├── js/
+│   ├── products.js
+│   ├── cart.js
+│   ├── main.js
+│   └── ai-rules.js
+└── assets/
+    └── images/
+        ├── 1.png
+        ├── 2.png
+        ├── ...
+        └── 30.png
