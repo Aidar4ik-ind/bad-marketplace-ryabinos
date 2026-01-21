@@ -815,24 +815,6 @@
             }
         }
 
-        function changeMainImage(src, element) {
-            // Меняем основное изображение
-            const mainImage = document.getElementById('mainProductImage');
-            if (mainImage) {
-                mainImage.src = src;
-            }
-            
-            // Убираем активный класс со всех миниатюр
-            document.querySelectorAll('.gallery-thumb').forEach(thumb => {
-                thumb.classList.remove('active');
-            });
-            
-            // Добавляем активный класс текущей миниатюре
-            if (element) {
-                element.classList.add('active');
-            }
-        }
-
         function openImageModal(src) {
             const modalImage = document.getElementById('modalImage');
             if (modalImage) {
