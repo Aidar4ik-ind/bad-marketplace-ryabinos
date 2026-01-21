@@ -1,7 +1,7 @@
 /* Основные стили - НОВЫЙ ДИЗАЙН */
 :root {
     --primary-color: #4361ee;
-    --secondary-color: #3a0ca3;
+    --secondary-color: #f8f9fa;
     --accent-color: #f72585;
     --success-color: #4cc9f0;
     --warning-color: #f8961e;
@@ -18,7 +18,7 @@
     --gray-800: #343a40;
     --gray-900: #212529;
     
-    --gradient-1: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+    --gradient-1: linear-gradient(135deg, #4361ee 0%, #f8f9fa 100%);
     --gradient-2: linear-gradient(135deg, #f72585 0%, #b5179e 100%);
     --gradient-3: linear-gradient(135deg, #4cc9f0 0%, #4895ef 100%);
     --gradient-4: linear-gradient(135deg, #f8961e 0%, #f3722c 100%);
